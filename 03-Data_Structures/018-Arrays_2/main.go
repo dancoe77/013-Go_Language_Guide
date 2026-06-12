@@ -30,4 +30,13 @@ func main() {
 				fmt.Println(i, fruit)
 			}
 	*/
+
+	// Declare an array of 4 integers that is initialized
+	// with some values.
+	numbers := [4]int{10, 20, 30, 40}
+
+	// Iterate over the array of numbers.
+	for i := 0; i < len(numbers); i++ {
+		fmt.Println(i, numbers[i])
+	}
 }
