@@ -15,6 +15,9 @@ import (
 // counter is a variable incremented by all goroutines.
 var counter int
 
+// mutex is used to define a critical section of code.
+var mutex sync.Mutex
+
 func main() {
 
 	// Number of goroutines to use.
@@ -29,23 +32,29 @@ func main() {
 		go func() {
 			for i := 0; i < 2; i++ {
 
-				// Capture the value of Counter.
-				value := counter
+				// Only allow one goroutine through this critical section at a time.
+				mutex.Lock()
+				{
 
-				// Increment our local value of Counter.
-				value++
+					// Capture the value of Counter.
+					value := counter
 
-				// Store the value back into Counter.
-				counter = value
+					// Increment our local value of Counter.
+					value++
+
+					// Store the value back into Counter.
+					counter = value
+				}
+				// Release the lock and allow any waiting goroutine through.
+				mutex.Unlock()
 			}
-
 			wg.Done()
 		}()
 	}
 
 	// Wait for the goroutines to finish.
 	wg.Wait()
-	fmt.Println("Final Counter:", counter)
+	fmt.Printf("Final Counter: %d\n", counter)
 }
 
 /*
