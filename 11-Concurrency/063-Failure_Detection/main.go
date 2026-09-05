@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	log ""
+	"github.com/dancoe77/013-Go_Language_Guide/11-Concurrency/063-Failure_Detection/logger/logger"
 )
 
 // device allows us to mock a device we write logs to.
@@ -54,13 +54,13 @@ func main() {
 	// Create a logger value with a buffer of capacity
 	// for each goroutine that will be logging.
 	var d device
-	l := log.New(&d, "prefix", 0)
+	l := logger.New(&d, grs)
 
 	// Generate goroutines, each writing to disk.
 	for i := 0; i < grs; i++ {
 		go func(id int) {
 			for {
-				l.Println(fmt.Sprintf("%d : log data", id))
+				l.Write(fmt.Sprintf("%d : log data", id))
 				time.Sleep(10 * time.Millisecond)
 			}
 		}(i)
